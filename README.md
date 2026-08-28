@@ -26,18 +26,6 @@ Top-K Relevant Chunks
 
 Given a query like `"What is Kubernetes?"`, the system returns the most relevant document chunks based on embedding similarity.
 
----
-
-## Week 1 Scope — Chunking + Embeddings + Retrieval
-
-Three chunking strategies, compared against each other:
-- **Fixed-size chunking** — split by character/token count
-- **Sentence-based chunking** — split at sentence boundaries
-- **Semantic chunking** — split where meaning shifts (embedding similarity drop)
-
-No FAISS yet (Week 2). No FastAPI server yet (Week 3).
-
----
 
 ## Project Structure
 
