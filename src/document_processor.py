@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import spacy
 
 
 
@@ -42,6 +43,7 @@ def clean_wikipedia_text(raw_text):
             "View history",
             "Main article:",
             "vte",
+            "Categories"
         ]
         if any(keyword in line for keyword in skip_keywords):
             continue
@@ -52,12 +54,41 @@ def clean_wikipedia_text(raw_text):
 
         # 4. Remove citation brackets (e.g., [1], [2a], [failed verification])
         line = re.sub(r"\[.*?\]", "", line)
+        
+        if line and line[-1] not in [".","?","!"]:
+            line += "."
 
         cleaned_lines.append(line)
 
     # Join the clean lines back together into paragraphs
     return "\n\n".join(cleaned_lines)
 
+
+def clean_with_spacy(wikitext):
+    cleaned_lines = []
+    nlp = spacy.load("en_core_web_sm")
+
+    # Your raw Wikipedia text variable
+    wikipedia_text = wikitext
+
+    # 2. Clean up excess whitespace/newlines before feeding it to spaCy
+    # This joins broken lines but keeps text structure clean
+    cleaned_text = " ".join(wikipedia_text.split())
+
+    # 3. Process the text
+    doc = nlp(cleaned_text)
+
+    # 4. Extract and print only valid, full sentences
+    print("--- CLEANED SENTENCE CHUNKS ---\n")
+    for sent in doc.sents:
+        sentence_string = sent.text.strip()
+        
+        # Filter out empty strings or random short fragments (like "False" or "{}")
+        # A realistic sentence usually has at least 3 words and ends with punctuation
+        if len(sentence_string.split()) >= 3 and sentence_string[-1] in [".", "?", "!"]:
+            cleaned_lines.append(sentence_string)
+            
+    return cleaned_lines
 
 def load_document(file_path:str,category:str)->dict:
     
@@ -67,7 +98,7 @@ def load_document(file_path:str,category:str)->dict:
     
     return{
         "document_id":extract_document_id(file_path),
-        "text":clean_wikipedia_text(txt),
+        "text":clean_with_spacy(clean_wikipedia_text(txt)),
         "metadata":{
             "title":f"{extract_document_id(file_path)}.txt",
             "category":category
@@ -92,6 +123,41 @@ def fixed_size_chunks(text: str, chunk_size: int, overlap: int) -> list:
     return chunks
 
 
+
+def sentence_chunks(sentences: list, max_length: int, overlap_sentences: int) -> list:
+    final_chunks = []
+    current_chunk = []
+    current_length = 0
+    
+    for sentence in sentences:
+        sentence_len = len(sentence)
+        
+        # Check if adding this sentence exceeds the limit
+        if current_length + sentence_len > max_length and current_chunk:
+            # Seal the box
+            chunk_text = " ".join(current_chunk)
+            final_chunks.append(chunk_text)
+            
+            # Carry over the overlap
+            overlap = current_chunk[-overlap_sentences:] if overlap_sentences > 0 else []
+            current_chunk = overlap + [sentence]
+            
+            # Recalculate length (+1 for spaces)
+            current_length = sum(len(s) + 1 for s in current_chunk) 
+            
+        else:
+            # Keep packing the box
+            current_chunk.append(sentence)
+            current_length += sentence_len + 1 
+            
+    # Flush the final remaining sentences
+    if current_chunk:
+        chunk_text = " ".join(current_chunk)
+        final_chunks.append(chunk_text)
+        
+    return final_chunks
+
+
 def evaluate_chunks(chunks):
     chunk_lengths = [len(chunk) for chunk in chunks]
     print(f"Total chunks: {len(chunks)}")
@@ -108,17 +174,23 @@ if __name__ == "__main__":
     text = load_document("data/documents/python.txt", "programming")["text"]
 
     print("Testing Size 100:")
-    chunks_100 = fixed_size_chunks(text, chunk_size=100, overlap=20)
+    chunks_100 = sentence_chunks(text, 100,1)
     evaluate_chunks(chunks_100)
     
     
     print("Testing Size 200:")
-    chunks_200 = fixed_size_chunks(text, chunk_size=200, overlap=20)
+    chunks_200 = sentence_chunks(text, 200,1)
+    print("--- HUNTING THE GIANT CHUNK ---")
+    for chunk in chunks_200:
+        if len(chunk) > 500:
+            print(chunk)
     evaluate_chunks(chunks_200)
         
         
-    print("Testing Size 100:")
-    chunks_400 = fixed_size_chunks(text, chunk_size=400, overlap=20)
+    print("Testing Size 400:")
+    chunks_400 = sentence_chunks(text, 400,1)
     evaluate_chunks(chunks_400)
+    
+    #print(text)
     
     
