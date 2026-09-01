@@ -106,6 +106,16 @@ def load_document(file_path:str,category:str)->dict:
         
     }
     
+def clean_document(file_path:str,clean_file_path):
+    
+    
+    text = load_document(file_path, "programming")["text"]
+    
+    
+    with open(clean_file_path,"w") as file:
+        file.write(" ".join(text))
+    
+    
     
 def fixed_size_chunks(text: str, chunk_size: int, overlap: int) -> list:
     chunks = []
@@ -171,26 +181,8 @@ def evaluate_chunks(chunks):
 # (We would do the same for 200 and 400)
 
 if __name__ == "__main__":
-    text = load_document("data/documents/python.txt", "programming")["text"]
+    text = load_document("data/documents/machine_learning.txt", "programming")["text"]
+    
+    clean_document("data/documents/machine_learning.txt","data/clean_documents/machine_learning.txt")
 
-    print("Testing Size 100:")
-    chunks_100 = sentence_chunks(text, 100,1)
-    evaluate_chunks(chunks_100)
-    
-    
-    print("Testing Size 200:")
-    chunks_200 = sentence_chunks(text, 200,1)
-    print("--- HUNTING THE GIANT CHUNK ---")
-    for chunk in chunks_200:
-        if len(chunk) > 500:
-            print(chunk)
-    evaluate_chunks(chunks_200)
-        
-        
-    print("Testing Size 400:")
-    chunks_400 = sentence_chunks(text, 400,1)
-    evaluate_chunks(chunks_400)
-    
-    #print(text)
-    
     

@@ -1,0 +1,82 @@
+[
+  {
+    "query": "What is the primary purpose of a database management system?",
+    "expected_document": "database.txt"
+  },
+  {
+    "query": "What is the difference between a relational and a non-relational database?",
+    "expected_document": "database.txt"
+  },
+  {
+    "query": "What does SQL stand for and what is it used for?",
+    "expected_document": "database.txt"
+  },
+  {
+    "query": "What are the ACID properties in database transactions?",
+    "expected_document": "database.txt"
+  },
+  {
+    "query": "Who is credited with inventing the relational database model?",
+    "expected_document": "database.txt"
+  },
+  {
+    "query": "What is a database index and why is it used?",
+    "expected_document": "database.txt"
+  },
+  {
+    "query": "What is Docker and what problem does it solve?",
+    "expected_document": "docker.txt"
+  },
+  {
+    "query": "How does a Docker container differ from a virtual machine?",
+    "expected_document": "docker.txt"
+  },
+  {
+    "query": "What is a Dockerfile used for?",
+    "expected_document": "docker.txt"
+  },
+  {
+    "query": "What company originally developed Docker?",
+    "expected_document": "docker.txt"
+  },
+  {
+    "query": "What is Docker Hub?",
+    "expected_document": "docker.txt"
+  },
+  {
+    "query": "What underlying technology does Docker rely on for containerization on Linux?",
+    "expected_document": "docker.txt"
+  },
+  {
+    "query": "What is the difference between supervised and unsupervised machine learning?",
+    "expected_document": "machine_learning.txt"
+  },
+  {
+    "query": "What is a neural network in the context of machine learning?",
+    "expected_document": "machine_learning.txt"
+  },
+  {
+    "query": "What is overfitting in machine learning?",
+    "expected_document": "machine_learning.txt"
+  },
+  {
+    "query": "What is reinforcement learning?",
+    "expected_document": "machine_learning.txt"
+  },
+  {
+    "query": "Who is considered a founding figure of machine learning as a field?",
+    "expected_document": "machine_learning.txt"
+  },
+  {
+    "query": "Who created the Python programming language?",
+    "expected_document": "python.txt"
+  },
+  {
+    "query": "What programming paradigms does Python support?",
+    "expected_document": "python.txt"
+  },
+  {
+    "query": "What is the significance of indentation in Python syntax?",
+    "expected_document": "python.txt"
+  }
+]

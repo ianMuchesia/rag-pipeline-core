@@ -31,10 +31,13 @@ Given a query like `"What is Kubernetes?"`, the system returns the most relevant
 
 | Path | Contents |
 | :--- | :--- |
-| `src/document_processor.py` | Document loading and chunking strategies |
-| `notebooks/` | Experiments and retrieval comparisons |
-| `data/` | Sample document sets for testing |
-| `experiments/` | Chunking strategy comparison results |
+| `src/document_processor.py` | Document loading and chunking strategies (fixed-size, sentence-based, overlap) |
+| `src/retriever.py` | `VectorRetriever` — embedding store, cosine similarity search, top-K retrieval |
+| `data/documents/` | Raw document set (kubernetes, docker, python, ML, database) |
+| `data/clean_documents/` | Preprocessed versions of the same documents |
+| `data/documents/queries.json` | Test queries for retrieval evaluation |
+| `notebooks/chunking_comparison.ipynb` | Side-by-side comparison of chunking strategies |
+| `experiments/` | Retrieval results across chunking strategies |
 | `math-notes/` | Notes on embedding math and similarity metrics |
 
 ---
